@@ -1,4 +1,5 @@
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -109,7 +110,7 @@ jobs:
   flatpak:
     name: Build Flatpak bundle
     runs-on: ubuntu-latest
-    needs: check  # wait for the "check" job to succeed
+    needs: check
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
