@@ -1,0 +1,26 @@
+id: io.github.cortex.Ripasso
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+sdk-extensions: [org.freedesktop.Sdk.Extension.rust-stable]
+command: ripasso-cursive
+finish-args:
+  # allow gpg and git to talk to the host
+  - --share=network
+  - --filesystem=home
+  - --talk-name=org.freedesktop.secrets
+modules:
+  - name: ripasso-sources
+    buildsystem: cargo
+    sources:
+      - type: file
+        path: ripasso-sources.json
+    # env is optional: tell cargo to use vendored crates
+    build-commands:
+      - |
+        export CARGO_HOME="$PWD/cargo-home"
+        mkdir -p "$CARGO_HOME/registry"
+        ln -s "$PWD" "$CARGO_HOME/registry/src"
+        cargo build --frozen --release -p ripasso-cursive
+      - install -Dm0755 target/release/ripasso-cursive /app/bin/ripasso-cursive
+      - install -Dm0644 target/man-page/cursive/ripasso-cursive.1 /app/share/man/man1/ripasso-cursive.1
