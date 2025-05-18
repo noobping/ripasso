@@ -124,7 +124,7 @@ jobs:
           override: true
 
       - name: Generate lockfile
-        run: cargo generate-lockfile --offline
+        run: cargo generate-lockfile
 
       - name: Install flatpak-builder-tools
         run: pip install --user flatpak-builder-tools
